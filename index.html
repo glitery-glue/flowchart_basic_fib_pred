@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Fibrosis Prediction Pipeline - Flowchart</title>
+    <title>MASLD/MASH Fibrosis Prediction Pipeline - Flowchart</title>
     <style>
         * {
             margin: 0;
@@ -261,7 +261,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🏥 MASLD/MASH Fibrosis Prediction</h1>
+        <h1>🏥 Basic Fibrosis Prediction</h1>
         <p class="subtitle">LLM-Based Few-Shot Learning Pipeline</p>
         
         <div class="flowchart">
@@ -300,14 +300,21 @@
                         <h4>Processing Steps</h4>
                         <ul>
                             <li>Extract patient features (demographics, vitals, labs)</li>
-                            <li>Format as JSON with value, unit, and label for each feature</li>
+                            <li> Create a Feature Schema. Format as JSON with value, unit, and label for each feature</li>
                             <li>Prepare for LLM consumption (human-readable format)</li>
                         </ul>
-                        <h4 style="margin-top: 15px;">Example Features</h4>
+                        <h4 style="margin-top: 15px;">Example Output</h4>
                         <ul>
-                            <li>Age: 52 years | Gender: M | BMI: 32 kg/m²</li>
-                            <li>ALT: 78 U/L | AST: 56 U/L | Platelets: 185 ×10⁹/L</li>
-                            <li>Glucose: 126 mg/dL | HbA1c: 6.8% | HOMA-IR: calculated</li>
+                            <li>"Age": {
+                            "value": 43.0,
+                            "unit": "years",
+                            "label": "Age"
+                            },
+                            "Gender": {
+                            "value": 1.0,
+                            "unit": "",
+                            "label": "Sex"
+                            },</li>
                         </ul>
                     </div>
                 </div>
@@ -327,7 +334,6 @@
                         <h4>⚠️ CRITICAL PRINCIPLE: Cluster by INPUT, NOT Output</h4>
                         <ul>
                             <li>Remove label column (fib_stage_gt) before computing similarity</li>
-                            <li>Z-score normalize all features: (x - μ) / σ</li>
                             <li>Compute Euclidean distance on normalized features</li>
                             <li>Select K=5 nearest neighbors</li>
                             <li>Return original rows WITH labels (for few-shot learning)</li>
@@ -359,11 +365,11 @@
                     <div class="step-details">
                         <h4>Few-Shot Learning Structure</h4>
                         <ul>
-                            <li>Example 1: [All features] → Fibrosis Stage: F2</li>
-                            <li>Example 2: [All features] → Fibrosis Stage: F3</li>
-                            <li>Example 3: [All features] → Fibrosis Stage: F1</li>
-                            <li>Example 4: [All features] → Fibrosis Stage: F2</li>
-                            <li>Example 5: [All features] → Fibrosis Stage: F3</li>
+                            <li>Patient 1: [All features] → Fibrosis Stage: F2</li>
+                            <li>Patient 2: [All features] → Fibrosis Stage: F3</li>
+                            <li>Patient 3: [All features] → Fibrosis Stage: F2</li>
+                            <li>Patient 4: [All features] → Fibrosis Stage: F2</li>
+                            <li>Patient 5: [All features] → Fibrosis Stage: F3</li>
                         </ul>
                         <p style="margin-top: 15px;"><strong>Purpose:</strong> LLM learns patterns from similar cases to predict the target patient's stage.</p>
                     </div>
@@ -494,6 +500,8 @@
                         </ul>
                         <div style="margin-top: 15px;">
                             <span class="badge badge-success">✓ Model: GPT-5.2 (Full Reasoning)</span>
+                            <span class="badge badge-info">Max Tokens: 800</span>
+                            <span class="badge badge-warning">⚠️ Recommend: 1500+ tokens</span>
                         </div>
                     </div>
                 </div>
